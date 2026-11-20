@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Street Fighter II - Tournament Edition</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="arcade-cabinet">
+    <!-- Marquee Banner -->
+    <header class="arcade-marquee">
+      <div class="marquee-logo">
+        <span class="logo-red">STREET</span>
+        <span class="logo-white">FIGHTER</span>
+        <span class="logo-gold">II</span>
+      </div>
+      <div class="marquee-actions">
+        <button id="btn-mode-2p" class="arcade-btn active">⚔️ 2-PLAYER VERSUS</button>
+        <button id="btn-mode-tourney" class="arcade-btn">🏆 TOURNAMENT</button>
+        <button id="btn-mode-cpu" class="arcade-btn">🤖 CPU PRACTICE</button>
+        <button id="btn-p1-mode" class="arcade-btn mode-easy" title="Press F1 to toggle">P1: 🟢 EASY (1-Key)</button>
+        <button id="btn-p2-mode" class="arcade-btn mode-easy" title="Press F2 to toggle">P2: 🟢 EASY (1-Key)</button>
+        <button id="btn-toggle-sound" class="arcade-btn">🔊 SFX: ON</button>
+        <button id="btn-toggle-bgm" class="arcade-btn">🎵 BGM: ON</button>
+        <button id="btn-toggle-crt" class="arcade-btn">📺 CRT FILTER</button>
+        <button id="btn-controls-modal" class="arcade-btn">❓ GUIDE</button>
+      </div>
+    </header>
+
+    <!-- CRT Bezel & Screen Wrapper -->
+    <main class="bezel-frame">
+      <div id="game-screen" class="game-screen">
+        <canvas id="game-canvas" width="640" height="360"></canvas>
+        <div class="crt-overlay"></div>
+      </div>
+    </main>
+
+    <!-- Single Full-Size Keyboard Layout Guide -->
+    <footer class="keyboard-dock">
+      <!-- Player 1 Layout -->
+      <div class="player-dock p1-dock">
+        <div class="dock-header">
+          <span class="p-badge p1-badge">P1</span>
+          <span class="dock-char-name">PLAYER 1</span>
+          <span class="dock-side">(Left Side)</span>
+        </div>
+        <div class="dock-keys">
+          <div class="key-group">
+            <span class="group-label">MOVE</span>
+            <div class="key-caps">
+              <kbd>W</kbd> Jump &nbsp; <kbd>A</kbd> Back / Guard &nbsp; <kbd>S</kbd> Crouch &nbsp; <kbd>D</kbd> Forward
+            </div>
+          </div>
+          <div class="key-group">
+            <span class="group-label">ATTACK</span>
+            <div class="key-caps">
+              <kbd class="btn-punch">F</kbd> LP &nbsp;
+              <kbd class="btn-punch">G</kbd> HP &nbsp;
+              <kbd class="btn-kick">V</kbd> LK &nbsp;
+              <kbd class="btn-kick">B</kbd> HK (Sweep: S+B)
+            </div>
+          </div>
+          <div class="key-group">
+            <span class="group-label">SPECIAL</span>
+            <div id="p1-dock-special-label" class="key-caps">
+              <kbd class="btn-special">T</kbd> Special 1 &nbsp;
+              <kbd class="btn-special">Y</kbd> Special 2 &nbsp;
+              <kbd class="btn-special">H</kbd> Special 3 (or <kbd>U</kbd>)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard Spacer -->
+      <div class="dock-divider">
+        <div class="keyboard-icon">⌨️</div>
+        <span>SHARED KEYBOARD</span>
+        <small style="color: #a1a1aa; font-size: 9px; margin-top: 4px;">F1: P1 Mode • F2: P2 Mode</small>
+      </div>
+
+      <!-- Player 2 Layout -->
+      <div class="player-dock p2-dock">
+        <div class="dock-header">
+          <span class="p-badge p2-badge">P2</span>
+          <span class="dock-char-name">PLAYER 2</span>
+          <span class="dock-side">(Right Side / Numpad)</span>
+        </div>
+        <div class="dock-keys">
+          <div class="key-group">
+            <span class="group-label">MOVE</span>
+            <div class="key-caps">
+              <kbd>↑</kbd> Jump &nbsp; <kbd>←</kbd> Forward / Guard &nbsp; <kbd>↓</kbd> Crouch &nbsp; <kbd>→</kbd> Back
+            </div>
+          </div>
+          <div class="key-group">
+            <span class="group-label">ATTACK</span>
+            <div class="key-caps">
+              <kbd class="btn-punch">Num 4</kbd> LP &nbsp;
+              <kbd class="btn-punch">Num 5</kbd> HP &nbsp;
+              <kbd class="btn-kick">Num 1</kbd> LK &nbsp;
+              <kbd class="btn-kick">Num 2</kbd> HK (Sweep)
+            </div>
+          </div>
+          <div class="key-group">
+            <span class="group-label">SPECIAL</span>
+            <div id="p2-dock-special-label" class="key-caps">
+              <kbd class="btn-special">Num 6</kbd> Special 1 &nbsp;
+              <kbd class="btn-special">Num 3</kbd> Special 2 &nbsp;
+              <kbd class="btn-special">Num 0</kbd> Special 3
+            </div>
+          </div>
+        </div>
+        <div class="alt-keys-note">
+          <small>No Numpad? Alt P2 Keys: <kbd>I</kbd> LP, <kbd>O</kbd> HP, <kbd>K</kbd> LK, <kbd>L</kbd> HK, <kbd>P</kbd> Special 1, <kbd>[</kbd> Special 2, <kbd>]</kbd> Special 3</small>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Move List & Controls Modal Dialog -->
+  <div id="controls-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>🥋 STREET FIGHTER II - FIGHTER'S GUIDE & ROSTER</h2>
+        <button id="modal-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <section class="modal-section">
+          <h3>🎮 Universal Fighting Mechanics</h3>
+          <ul>
+            <li><strong>Special Move Mode Toggles:</strong> Switch between <em>🟢 EASY (1-Key Shortcut)</em> and <em>🟡 CLASSIC (Arcade Motion)</em> independently for P1 (<kbd>F1</kbd>) and P2 (<kbd>F2</kbd>).</li>
+            <li><strong>High / Mid Guard:</strong> Hold <em>Back</em> away from the opponent while they strike to block attacks.</li>
+            <li><strong>Low Guard (Crouch Block):</strong> Hold <em>Down + Back</em> to block sweeps and low kicks.</li>
+            <li><strong>Crouching Sweep:</strong> Press <kbd>Crouch</kbd> + <kbd>Heavy Kick</kbd> to execute a tripping sweep that knocks the opponent down.</li>
+            <li><strong>✈️ Flight Lift:</strong> Hold <kbd>Up</kbd> + tap Light Punch or Light Kick during jumps to gain mid-air upward thrust!</li>
+          </ul>
+        </section>
+
+        <section class="modal-section">
+          <h3>🥋 Complete World Warriors Roster & Movesets</h3>
+          <div class="moves-table">
+            <div class="move-row">
+              <div class="move-name">RYU & KEN (Shotokan Masters)</div>
+              <div class="move-motion">Hadouken (Fireball): P1: <kbd>S</kbd>, <kbd>D</kbd> + <kbd>F</kbd> | P2: <kbd>↓</kbd>, <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Shoryuken (Dragon Punch): P1: <kbd>D</kbd>, <kbd>S</kbd>, <kbd>D</kbd> + <kbd>F</kbd> | P2: <kbd>←</kbd>, <kbd>↓</kbd>, <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+              <div class="move-motion">Tatsumaki (Hurricane Kick): P1: <kbd>S</kbd>, <kbd>A</kbd> + <kbd>V</kbd> | P2: <kbd>↓</kbd>, <kbd>→</kbd> + <kbd>Num 1</kbd> | Shortcut: <kbd>H</kbd> / <kbd>Num 0</kbd></div>
+            </div>
+
+            <div class="move-row">
+              <div class="move-name">E. HONDA (Sumo Powerhouse of Japan)</div>
+              <div class="move-motion">Hundred Hand Slap: P1: Tap <kbd>F</kbd> rapidly | P2: Tap <kbd>Num 4</kbd> rapidly | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Super Sumo Headbutt: P1: Hold <kbd>A</kbd> (0.5s) → <kbd>D</kbd> + <kbd>F</kbd> | P2: Hold <kbd>→</kbd> (0.5s) → <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+            </div>
+
+            <div class="move-row">
+              <div class="move-name">BLANKA (Wild Beast of Brazil)</div>
+              <div class="move-motion">Electric Thunder: P1: Tap <kbd>F</kbd> rapidly | P2: Tap <kbd>Num 4</kbd> rapidly | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Rolling Attack (Beast Cannonball): P1: Hold <kbd>A</kbd> (0.5s) → <kbd>D</kbd> + <kbd>F</kbd> | P2: Hold <kbd>→</kbd> (0.5s) → <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+            </div>
+
+            <div class="move-row">
+              <div class="move-name">GUILE (Military Zoning Master)</div>
+              <div class="move-motion">Sonic Boom: P1: Hold <kbd>A</kbd> (0.5s) → <kbd>D</kbd> + <kbd>F</kbd> | P2: Hold <kbd>→</kbd> (0.5s) → <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Flash Kick (Somersault): P1: Hold <kbd>S</kbd> (0.5s) → <kbd>W</kbd> + <kbd>V</kbd> | P2: Hold <kbd>↓</kbd> (0.5s) → <kbd>↑</kbd> + <kbd>Num 1</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+            </div>
+
+            <div class="move-row">
+              <div class="move-name">CHUN-LI (First Lady of Fighting)</div>
+              <div class="move-motion">Hyakuretsu Kyaku (Lightning Legs): P1: Tap <kbd>V</kbd> rapidly | P2: Tap <kbd>Num 1</kbd> rapidly | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Kikoken (Chi Palm Blast): P1: <kbd>S</kbd>, <kbd>D</kbd> + <kbd>F</kbd> | P2: <kbd>↓</kbd>, <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+              <div class="move-motion">Spinning Bird Kick: P1: <kbd>S</kbd>, <kbd>A</kbd> + <kbd>V</kbd> | P2: <kbd>↓</kbd>, <kbd>→</kbd> + <kbd>Num 1</kbd> | Shortcut: <kbd>H</kbd> / <kbd>Num 0</kbd></div>
+            </div>
+
+            <div class="move-row">
+              <div class="move-name">ZANGIEF (The Red Cyclone of Russia)</div>
+              <div class="move-motion">Double Lariat: P1: <kbd>S</kbd>, <kbd>D</kbd> + <kbd>F</kbd> | P2: <kbd>↓</kbd>, <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Spinning Piledriver (SPD): P1: Close + <kbd>D</kbd>, <kbd>S</kbd>, <kbd>D</kbd> + <kbd>F</kbd> | P2: Close + <kbd>←</kbd>, <kbd>↓</kbd>, <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+            </div>
+
+            <div class="move-row">
+              <div class="move-name">DHALSIM (Mystical Yogi of India)</div>
+              <div class="move-motion">Yoga Fire: P1: <kbd>S</kbd>, <kbd>D</kbd> + <kbd>F</kbd> | P2: <kbd>↓</kbd>, <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Yoga Flame: P1: <kbd>S</kbd>, <kbd>A</kbd> + <kbd>F</kbd> | P2: <kbd>↓</kbd>, <kbd>→</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+              <div class="move-motion">Stretchy Limbs: Normal punches & kicks reach 3x across the arena!</div>
+            </div>
+
+            <div class="move-row">
+              <div class="move-name">M. BISON (Dictator & Final Boss)</div>
+              <div class="move-motion">Psycho Crusher (Torpedo): P1: Hold <kbd>A</kbd> (0.5s) → <kbd>D</kbd> + <kbd>F</kbd> | P2: Hold <kbd>→</kbd> (0.5s) → <kbd>←</kbd> + <kbd>Num 4</kbd> | Shortcut: <kbd>T</kbd> / <kbd>Num 6</kbd></div>
+              <div class="move-motion">Double Knee Press (Scissor Kick): P1: Hold <kbd>A</kbd> (0.5s) → <kbd>D</kbd> + <kbd>V</kbd> | P2: Hold <kbd>→</kbd> (0.5s) → <kbd>←</kbd> + <kbd>Num 1</kbd> | Shortcut: <kbd>Y</kbd> / <kbd>Num 3</kbd></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="modal-section">
+          <h3>⚡ Keyboard Hotkeys</h3>
+          <p><kbd>ENTER</kbd> Start / Confirm &nbsp;|&nbsp; <kbd>ESC</kbd> Pause &nbsp;|&nbsp; <kbd>M</kbd> Mute BGM &nbsp;|&nbsp; <kbd>F1</kbd> P1 Mode &nbsp;|&nbsp; <kbd>F2</kbd> P2 Mode</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script src="bundle.js"></script>
+</body>
+</html>

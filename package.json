@@ -1,0 +1,10 @@
+{
+  "name": "street-fighter-2-clone",
+  "version": "1.0.0",
+  "description": "Street Fighter II arcade clone for 2 players on a single keyboard",
+  "scripts": {
+    "start": "python3 -m http.server 3000"
+  },
+  "author": "Antigravity",
+  "license": "MIT"
+}
